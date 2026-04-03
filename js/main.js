@@ -3,8 +3,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const simulateBtn = document.getElementById('simulateBtn');
     const splitArea = document.getElementById('splitArea');
     const pumpControls = document.getElementById('pumpControls');
-    const kSlider = document.getElementById('kSlider');
-    const kValDisplay = document.getElementById('kValDisplay');
     const pumpVisualizer = document.getElementById('pumpVisualizer');
     const resultString = document.getElementById('resultString');
     const resultBox = document.getElementById('resultBox');
@@ -18,6 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let testResults = [];
 
     simulateBtn.addEventListener('click', () => {
+
         const input = document.getElementById('stringInput').value || 'aaabbb';
 
         currentParts.x = input.charAt(0);
@@ -31,25 +30,17 @@ document.addEventListener("DOMContentLoaded", () => {
         splitArea.classList.remove('hidden');
         pumpControls.classList.remove('hidden');
 
+        showDefaultVisualization();  
+
         runFullTest();
     });
+    function showDefaultVisualization() {
+    pumpVisualizer.innerHTML = '';
 
-    kSlider.addEventListener('input', (e) => {
-        updatePumping(parseInt(e.target.value));
-    });
-
-    function updatePumping(k) {
-        kValDisplay.innerText = `k = ${k}`;
-        pumpVisualizer.innerHTML = '';
-
-        addPartToVisual(currentParts.x, 'part-x');
-
-        for (let i = 0; i < k; i++) {
-            addPartToVisual(currentParts.y, 'part-y pump-animate');
-        }
-
-        addPartToVisual(currentParts.z, 'part-z');
-    }
+    addPartToVisual(currentParts.x, 'part-x');
+    addPartToVisual(currentParts.y, 'part-y');
+    addPartToVisual(currentParts.z, 'part-z');
+}
 
     function runFullTest() {
         testResults = [];

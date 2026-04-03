@@ -231,62 +231,54 @@
                     k = 1
                 </span>
             </div>
+        <div class="text-sm text-slate-500 text-center mb-4">
+    🔁 Testing multiple values of k automatically (0 to 5)
+</div>
+    <div id="resultBox"
+        class="mt-10 p-6 rounded-2xl bg-white border border-slate-200 shadow-md transition-all duration-500">
 
-            <!-- Slider -->
-            <input type="range" id="kSlider" min="0" max="5" value="1"
-                class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-red-500 
-                hover:accent-red-600 transition">
+        <!-- Title -->
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="text-lg font-bold text-slate-700">Pumping Results</h3>
+            <span class="text-xs text-slate-400">Testing multiple k values</span>
+        </div>
 
-            <!-- Pump Animation -->
-            <div class="mt-10 flex justify-center gap-2 text-lg font-mono min-h-[60px]" id="pumpVisualizer"></div>
-
-            <!-- Result -->
-            <!-- RESULTS PANEL -->
-<div id="resultBox"
-    class="mt-10 p-6 rounded-2xl bg-white border border-slate-200 shadow-md transition-all duration-500">
-
-    <!-- Title -->
-    <div class="flex items-center justify-between mb-4">
-        <h3 class="text-lg font-bold text-slate-700">Pumping Results</h3>
-        <span class="text-xs text-slate-400">Testing multiple k values</span>
-    </div>
-
-    <!-- Results Table -->
-    <div id="resultString" class="space-y-2 text-sm font-mono">
-        <!-- JS will inject rows -->
-    </div>
+        <!-- Results Table -->
+        <div id="resultString" class="space-y-2 text-sm font-mono">
+            <!-- JS will inject rows -->
+        </div>
 
 </div>
 
-<!-- FINAL CONCLUSION -->
-<div id="conclusion"
-    class="mt-6 p-5 rounded-2xl hidden transition-all duration-500">
+    <!-- FINAL CONCLUSION -->
+    <div id="conclusion"
+        class="mt-6 p-5 rounded-2xl hidden transition-all duration-500">
 
-    <div class="flex items-start gap-3">
-        <div id="resultIcon" class="text-2xl"></div>
+        <div class="flex items-start gap-3">
+            <div id="resultIcon" class="text-2xl"></div>
 
-        <div>
-            <div class="text-sm uppercase font-bold opacity-60 mb-1">
-                Final Conclusion
-            </div>
+            <div>
+                <div class="text-sm uppercase font-bold opacity-60 mb-1">
+                    Final Conclusion
+                </div>
 
-            <div id="finalText" class="text-base font-semibold leading-relaxed">
-                <!-- JS will insert explanation -->
-            </div>
+                <div id="finalText" class="text-base font-semibold leading-relaxed">
+                    <!-- JS will insert explanation -->
+                </div>
 
-            <div id="theoryText" class="text-sm mt-2 opacity-80">
-                <!-- Pumping lemma explanation -->
+                <div id="theoryText" class="text-sm mt-2 opacity-80">
+                    <!-- Pumping lemma explanation -->
+                </div>
             </div>
         </div>
+
     </div>
 
-</div>
-
+            </div>
         </div>
-    </div>
 
-</section>
-    </main>
+    </section>
+        </main>
 
     <footer class="mt-20 text-center text-slate-400 text-sm">
         <p>Made for Theory of Computation Project</p>
