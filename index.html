@@ -219,14 +219,21 @@
 
         </div>
     </div>
+    <div id="pumpVisualizer" class="flex justify-center gap-3 mt-6 text-xl font-mono"></div>
 
     <!-- PUMP CONTROLS -->
     <div id="pumpControls" class="hidden mt-12 border-t pt-10 fade-in">
 
         <div class="max-w-md mx-auto text-center">
 
+            <div class="flex justify-between items-center mb-6">
+                <label class="font-bold text-slate-700 text-lg"></label>
+                <span class="bg-red-100 text-red-600 px-4 py-1 rounded-full font-bold shadow-sm" id="kValDisplay">
+
+                </span>
+            </div>
         <div class="text-sm text-slate-500 text-center mb-4">
-    🔁 Testing multiple values of k (Pumping Value) automatically (0 to 5)
+    🔁 Testing multiple values of k automatically (0 to 5)
 </div>
     <div id="resultBox"
         class="mt-10 p-6 rounded-2xl bg-white border border-slate-200 shadow-md transition-all duration-500">
@@ -275,9 +282,8 @@
         </main>
 
     <footer class="mt-20 text-center text-slate-400 text-sm">
-        <p>Made for Theory of Computation Project</p>
-        <p class="mt-1 font-semibold text-slate-500">CS Division &bull; 2024</p>
+        <p>Made for Theory of Automata & Formal Languages Project : 2026</p>
     </footer>
 </body>
-<script src = "js/main.js"></script>
+<script src="js/main.js" defer></script>
 </html>

@@ -43,35 +43,38 @@ document.addEventListener("DOMContentLoaded", () => {
 }
 
     function runFullTest() {
-        testResults = [];
-        let resultHTML = ``;
+    console.log("Running full test...");
 
-        for (let k = 0; k <= 5; k++) {
-            const str = currentParts.x + currentParts.y.repeat(k) + currentParts.z;
-            const valid = checkLanguage(str);
+    testResults = [];
+    let resultHTML = ``;
 
-            testResults.push(valid);
+    for (let k = 0; k <= 5; k++) {
+        const str = currentParts.x + currentParts.y.repeat(k) + currentParts.z;
+        const valid = checkLanguage(str);
 
-            resultHTML += `
-                <div class="flex justify-between items-center px-3 py-2 rounded-lg 
-                    ${valid ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200'}">
+        console.log("k:", k, str, valid);
 
-                    <span class="font-semibold">k = ${k}</span>
+        testResults.push(valid);
 
-                    <span class="font-mono ${valid ? 'text-green-600' : 'text-red-600'}">
-                        ${str}
-                    </span>
+        resultHTML += `
+            <div class="flex justify-between items-center px-3 py-2 rounded-lg 
+                ${valid ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200'}">
 
-                    <span class="text-lg">
-                        ${valid ? '✔' : '✖'}
-                    </span>
-                </div>
-            `;
-        }
-
-        resultString.innerHTML = resultHTML;
-        finalConclusion();
+                <span>k = ${k}</span>
+                <span>${str}</span>
+                <span>${valid ? '✔' : '✖'}</span>
+            </div>
+        `;
     }
+
+    if (resultString) {
+        resultString.innerHTML = resultHTML;
+    } else {
+        console.error("resultString not found!");
+    }
+
+    finalConclusion();
+}
 
     function checkLanguage(str) {
         const lang = document.getElementById('langSelect').value;
