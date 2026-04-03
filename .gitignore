@@ -1,0 +1,21 @@
+# Node modules (if using npm)
+node_modules/
+
+# Build files
+dist/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+npm-debug.log*
+
+# Environment files
+.env
+
+# VS Code settings
+.vscode/
+
+# Tailwind cache (optional)
+.cache/

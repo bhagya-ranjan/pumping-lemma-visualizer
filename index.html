@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pumping Lemma Visualizer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        
+        .part-x { @apply bg-blue-500 text-white px-3 py-1 rounded-md shadow-sm; }
+        .part-y { @apply bg-red-500 text-white px-3 py-1 rounded-md shadow-sm ring-4 ring-red-200; }
+        .part-z { @apply bg-green-500 text-white px-3 py-1 rounded-md shadow-sm; }
+        
+        .pump-animate {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen pb-12">
+
+    <nav class="fixed top-0 w-full bg-slate-900 text-white z-50 shadow-lg">
+        <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-center">
+            <div class="flex items-center gap-2">
+                <svg class="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                </svg>
+                <span class="text-xl font-bold tracking-tight ">Pumping Lemma Visualizer</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- THEORY SECTION -->
+<section class="bg-white rounded-3xl shadow-xl p-6 md:p-10 border border-slate-200 mt-12 mb-16">
+
+    <!-- Title -->
+    <h2 class="text-3xl font-bold mb-10 text-slate-800 fade-in">
+        Pumping Lemma Theory
+    </h2>
+
+    <!-- Definition -->
+    <div class="mb-12 fade-in">
+        <h3 class="text-xl font-semibold mb-4 text-slate-700">Definition</h3>
+        <p class="text-slate-600 leading-relaxed">
+            Any sufficiently long string can be split into 
+            <span class="px-2 py-1 bg-blue-100 text-blue-600 rounded-md font-mono">x</span>, 
+            <span class="px-2 py-1 bg-red-100 text-red-600 rounded-md font-mono animate-pulse">y</span>, 
+            <span class="px-2 py-1 bg-green-100 text-green-600 rounded-md font-mono">z</span>
+            such that repeating 
+            <span class="text-red-500 font-bold">y</span> keeps the string valid.
+        </p>
+
+        <div class="mt-6 bg-slate-50 p-5 rounded-xl font-mono text-sm space-y-2 border border-slate-200">
+            <div class="hover:translate-x-1 transition">|xy| ≤ p</div>
+            <div class="hover:translate-x-1 transition">|y| &gt; 0</div>
+            <div class="hover:translate-x-1 transition">xy<sup>k</sup>z ∈ L</div>
+        </div>
+    </div>
+
+    <!-- Split Visualization -->
+    <div class="mb-12 fade-in">
+        <h3 class="text-xl font-semibold mb-4 text-slate-700">String Breakdown</h3>
+
+        <div class="flex justify-center items-center gap-4 text-xl font-mono bg-slate-50 p-6 rounded-xl border border-slate-200">
+
+            <span class="px-3 py-1 bg-blue-500 text-white rounded-md shadow-md transform hover:scale-110 transition">
+                aaa
+            </span>
+
+            <span class="text-slate-400">→</span>
+
+            <span class="px-3 py-1 bg-red-500 text-white rounded-md shadow-md ring-4 ring-red-200 animate-bounce">
+                bb
+            </span>
+
+            <span class="text-slate-400">→</span>
+
+            <span class="px-3 py-1 bg-green-500 text-white rounded-md shadow-md transform hover:scale-110 transition">
+                ccc
+            </span>
+        </div>
+
+        <p class="text-center text-sm text-slate-500 mt-3 italic">
+            Hover and notice how y stands out 🔴
+        </p>
+    </div>
+
+    <!-- Pumping Animation -->
+    <div class="mb-12 fade-in">
+        <h3 class="text-xl font-semibold mb-4 text-slate-700">Pumping Process</h3>
+
+        <div class="bg-slate-900 text-white p-6 rounded-xl font-mono text-sm space-y-3 overflow-hidden">
+
+            <div class="animate-[fadeIn_0.6s_ease]">k = 0 → aaaccc</div>
+            <div class="animate-[fadeIn_0.8s_ease]">k = 1 → aaabbccc</div>
+            <div class="animate-[fadeIn_1s_ease]">k = 2 → aaabbbbccc</div>
+            <div class="animate-[fadeIn_1.2s_ease]">k = 3 → aaabbbbbbccc</div>
+
+        </div>
+
+        <p class="text-slate-600 mt-4">
+            Increasing <span class="text-red-500 font-bold">k</span> repeats 
+            <span class="text-red-500 font-mono">y</span>.
+        </p>
+    </div>
+
+    <!-- Intuition -->
+    <div class="mb-12 fade-in">
+        <h3 class="text-xl font-semibold mb-4 text-slate-700">Intuition</h3>
+
+        <div class="bg-blue-50 border border-blue-200 p-5 rounded-xl hover:shadow-lg transition">
+            <p class="text-slate-700 leading-relaxed">
+                Finite automata have limited memory. When processing long strings, they loop.
+                That loop corresponds to 
+                <span class="text-red-500 font-mono animate-pulse">y</span>.
+            </p>
+        </div>
+    </div>
+
+    <!-- Non-Regular Example -->
+    <div class="fade-in">
+        <h3 class="text-xl font-semibold mb-4 text-slate-700">Non-Regular Example</h3>
+
+        <div class="bg-red-50 border border-red-200 p-6 rounded-xl font-mono text-sm space-y-2 hover:scale-[1.01] transition">
+
+            <div>L = { aⁿbⁿ }</div>
+            <div>s = aaabbb</div>
+            <div>x = a, y = a, z = abbb</div>
+
+            <div class="text-red-600 font-bold animate-pulse">
+                xy²z = aaaabbb ❌
+            </div>
+
+        </div>
+
+        <p class="text-slate-600 mt-4">
+            Pumping breaks the condition → Not Regular ❌
+        </p>
+    </div>
+
+</section>
+
+    <main class="max-w-4xl mx-auto px-4 -mt-10">
+        
+        <section class="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl p-6 md:p-10 border border-slate-200 transition-all duration-500">
+
+    <!-- INPUT AREA -->
+    <div class="space-y-8">
+
+        <!-- Language -->
+        <div>
+            <label class="block text-sm font-semibold text-slate-600 mb-2">Language Selector</label>
+            <select id="langSelect" 
+                class="w-full p-3 rounded-xl border border-slate-300 bg-white shadow-sm 
+                focus:ring-2 focus:ring-blue-500 outline-none transition-all hover:shadow-md">
+                <option value="anbn">L1: aⁿbⁿ (Non-Regular)</option>
+                <option value="astar">L2: a*</option>
+                <option value="even0">L3: Even number of 0s</option>
+                <option value="end01">L4: Ends with 01</option>
+            </select>
+        </div>
+
+        <!-- Input -->
+        <div>
+            <div class="flex justify-between mb-2">
+                <label class="text-sm font-semibold text-slate-600">String Input</label>
+                <span class="text-xs font-mono text-blue-600 bg-blue-50 px-3 py-1 rounded-full shadow-sm">
+                    p = 3
+                </span>
+            </div>
+
+            <input type="text" id="stringInput" placeholder="e.g., aaabbb"
+                class="w-full p-4 rounded-xl border border-slate-300 focus:ring-2 focus:ring-blue-500 
+                outline-none font-mono shadow-sm transition-all hover:shadow-md">
+        </div>
+
+        <!-- Button -->
+        <button id="simulateBtn"
+            class="w-full bg-gradient-to-r from-slate-900 to-blue-600 text-white font-bold py-4 rounded-xl 
+            shadow-lg hover:scale-[1.02] hover:shadow-xl active:scale-[0.98] transition-all duration-300">
+            Simulate Split
+        </button>
+
+    </div>
+
+    <!-- SPLIT DISPLAY -->
+    <div id="splitArea" class="hidden mt-10 text-center">
+
+        <h3 class="text-xs font-bold text-slate-400 uppercase mb-6 tracking-widest">
+            Current Split
+        </h3>
+
+        <div class="flex justify-center items-center gap-4 text-2xl font-mono">
+
+            <div class="flex flex-col items-center transform hover:scale-110 transition">
+                <span class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg" id="dispX">a</span>
+                <span class="text-xs mt-1 text-blue-500 font-bold">x</span>
+            </div>
+
+            <div class="flex flex-col items-center animate-pulse">
+                <span class="bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg ring-4 ring-red-200" id="dispY">a</span>
+                <span class="text-xs mt-1 text-red-500 font-bold">y</span>
+            </div>
+
+            <div class="flex flex-col items-center transform hover:scale-110 transition">
+                <span class="bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg" id="dispZ">abbb</span>
+                <span class="text-xs mt-1 text-green-500 font-bold">z</span>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- PUMP CONTROLS -->
+    <div id="pumpControls" class="hidden mt-12 border-t pt-10 fade-in">
+
+        <div class="max-w-md mx-auto text-center">
+
+            <div class="flex justify-between items-center mb-6">
+                <label class="font-bold text-slate-700 text-lg">Pumping Value (k)</label>
+                <span class="bg-red-100 text-red-600 px-4 py-1 rounded-full font-bold shadow-sm" id="kValDisplay">
+                    k = 1
+                </span>
+            </div>
+
+            <!-- Slider -->
+            <input type="range" id="kSlider" min="0" max="5" value="1"
+                class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-red-500 
+                hover:accent-red-600 transition">
+
+            <!-- Pump Animation -->
+            <div class="mt-10 flex justify-center gap-2 text-lg font-mono min-h-[60px]" id="pumpVisualizer"></div>
+
+            <!-- Result -->
+            <!-- RESULTS PANEL -->
+<div id="resultBox"
+    class="mt-10 p-6 rounded-2xl bg-white border border-slate-200 shadow-md transition-all duration-500">
+
+    <!-- Title -->
+    <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-bold text-slate-700">Pumping Results</h3>
+        <span class="text-xs text-slate-400">Testing multiple k values</span>
+    </div>
+
+    <!-- Results Table -->
+    <div id="resultString" class="space-y-2 text-sm font-mono">
+        <!-- JS will inject rows -->
+    </div>
+
+</div>
+
+<!-- FINAL CONCLUSION -->
+<div id="conclusion"
+    class="mt-6 p-5 rounded-2xl hidden transition-all duration-500">
+
+    <div class="flex items-start gap-3">
+        <div id="resultIcon" class="text-2xl"></div>
+
+        <div>
+            <div class="text-sm uppercase font-bold opacity-60 mb-1">
+                Final Conclusion
+            </div>
+
+            <div id="finalText" class="text-base font-semibold leading-relaxed">
+                <!-- JS will insert explanation -->
+            </div>
+
+            <div id="theoryText" class="text-sm mt-2 opacity-80">
+                <!-- Pumping lemma explanation -->
+            </div>
+        </div>
+    </div>
+
+</div>
+
+        </div>
+    </div>
+
+</section>
+    </main>
+
+    <footer class="mt-20 text-center text-slate-400 text-sm">
+        <p>Made for Theory of Computation Project</p>
+        <p class="mt-1 font-semibold text-slate-500">CS Division &bull; 2024</p>
+    </footer>
+</body>
+<script src = "js/main.js"></script>
+</html>
