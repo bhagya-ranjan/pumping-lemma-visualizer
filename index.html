@@ -73,7 +73,7 @@
 
     <!-- Split Visualization -->
     <div class="mb-12 fade-in">
-        <h3 class="text-xl font-semibold mb-4 text-slate-700">String Breakdown</h3>
+        <h3 class="text-xl font-semibold mb-4 text-slate-700">String Breakdown (aaabbccc) </h3>
 
         <div class="flex justify-center items-center gap-4 text-xl font-mono bg-slate-50 p-6 rounded-xl border border-slate-200">
 
@@ -95,7 +95,7 @@
         </div>
 
         <p class="text-center text-sm text-slate-500 mt-3 italic">
-            Hover and notice how y stands out 🔴
+            Hover and notice how y stands out !
         </p>
     </div>
 
@@ -124,9 +124,13 @@
 
         <div class="bg-blue-50 border border-blue-200 p-5 rounded-xl hover:shadow-lg transition">
             <p class="text-slate-700 leading-relaxed">
-                Finite automata have limited memory. When processing long strings, they loop.
-                That loop corresponds to 
-                <span class="text-red-500 font-mono animate-pulse">y</span>.
+                Finite automata have only a limited number of states, so they cannot remember long strings exactly. 
+                When they process a string longer than their number of states, they are forced to revisit some state, 
+                creating a loop. This loop corresponds to a part of the string called
+                <span class="text-red-600 font-mono text-xl animate-pulse"><Strong>y</Strong></span>.
+                Since the automaton behaves the same each time it goes around this loop, 
+                repeating or removing y does not change whether the string is accepted. 
+                This is why in regular languages, the string can be “pumped” by repeating y any number of times.
             </p>
         </div>
     </div>
@@ -188,102 +192,91 @@
                 outline-none font-mono shadow-sm transition-all hover:shadow-md">
         </div>
 
+        <div id="errorBox" class="hidden mt-3 p-3 rounded-xl bg-red-50 border border-red-200 text-red-600 text-sm"></div>
         <!-- Button -->
         <button id="simulateBtn"
-            class="w-full bg-gradient-to-r from-slate-900 to-blue-600 text-white font-bold py-4 rounded-xl 
-            shadow-lg hover:scale-[1.02] hover:shadow-xl active:scale-[0.98] transition-all duration-300">
-            Simulate Split
+        class="w-full py-4 rounded-xl font-bold text-slate-200
+        bg-slate-900
+
+        /* base glow */
+        shadow-[0_0_20px_rgba(99,102,241,0.25)]
+
+        transition-all duration-300 ease-out
+
+        /* hover → indigo gradient */
+        hover:-translate-y-[2px]
+        hover:text-white
+        hover:bg-gradient-to-r
+        hover:from-indigo-600
+        hover:via-indigo-500
+        hover:to-indigo-400
+        hover:shadow-[0_6px_18px_rgba(0,0,0,0.35),0_0_25px_rgba(99,102,241,0.5)]
+
+        /* active (press) */
+        active:translate-y-[2px]
+        active:scale-[0.97]
+        active:shadow-[0_2px_8px_rgba(0,0,0,0.4)]
+        ">
+
+        <span id="btnText">Simulate Split</span>
+
         </button>
 
-    </div>
-
-    <!-- SPLIT DISPLAY -->
-    <div id="splitArea" class="hidden mt-10 text-center">
-
-        <h3 class="text-xs font-bold text-slate-400 uppercase mb-6 tracking-widest">
-            Current Split
-        </h3>
-
-        <div class="flex justify-center items-center gap-4 text-2xl font-mono">
-
-            <div class="flex flex-col items-center transform hover:scale-110 transition">
-                <span class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg" id="dispX">a</span>
-                <span class="text-xs mt-1 text-blue-500 font-bold">x</span>
             </div>
 
-            <div class="flex flex-col items-center animate-pulse">
-                <span class="bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg ring-4 ring-red-200" id="dispY">a</span>
-                <span class="text-xs mt-1 text-red-500 font-bold">y</span>
-            </div>
+        <!-- WRAPPER (hidden by default) -->
+        <div id="theorySection" class="hidden">
 
-            <div class="flex flex-col items-center transform hover:scale-110 transition">
-                <span class="bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg" id="dispZ">abbb</span>
-                <span class="text-xs mt-1 text-green-500 font-bold">z</span>
-            </div>
+            <!-- CONTRADICTION THEORY -->
+            <div class="mt-10 p-6 rounded-2xl border fade-in
+                bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50
+                border-blue-200">
 
-        </div>
-    </div>
-    <div id="pumpVisualizer" class="flex justify-center gap-3 mt-6 text-xl font-mono"></div>
+                <p class="text-slate-700 leading-relaxed">
+                    Assume, for the sake of contradiction, that <strong>L</strong> is a regular language.
+                    Therefore, according to the Pumping Lemma, there exists a pumping length 
+                    <strong>p ≥ 1</strong> such that any string <strong>s ∈ L</strong> with 
+                    <strong>|s| ≥ p</strong> can be divided into three pieces:
+                    <strong>s = xyz</strong>.
+                </p>
 
-    <!-- PUMP CONTROLS -->
-    <div id="pumpControls" class="hidden mt-12 border-t pt-10 fade-in">
-
-        <div class="max-w-md mx-auto text-center">
-
-            <div class="flex justify-between items-center mb-6">
-                <label class="font-bold text-slate-700 text-lg"></label>
-                <span class="bg-red-100 text-red-600 px-4 py-1 rounded-full font-bold shadow-sm" id="kValDisplay">
-
-                </span>
-            </div>
-        <div class="text-sm text-slate-500 text-center mb-4">
-    🔁 Testing multiple values of k automatically (0 to 5)
-</div>
-    <div id="resultBox"
-        class="mt-10 p-6 rounded-2xl bg-white border border-slate-200 shadow-md transition-all duration-500">
-
-        <!-- Title -->
-        <div class="flex items-center justify-between mb-4">
-            <h3 class="text-lg font-bold text-slate-700">Pumping Results</h3>
-            <span class="text-xs text-slate-400">Testing multiple k values</span>
-        </div>
-
-        <!-- Results Table -->
-        <div id="resultString" class="space-y-2 text-sm font-mono">
-            <!-- JS will inject rows -->
-        </div>
-
-</div>
-
-    <!-- FINAL CONCLUSION -->
-    <div id="conclusion"
-        class="mt-6 p-5 rounded-2xl hidden transition-all duration-500">
-
-        <div class="flex items-start gap-3">
-            <div id="resultIcon" class="text-2xl"></div>
-
-            <div>
-                <div class="text-sm uppercase font-bold opacity-60 mb-1">
-                    Final Conclusion
+                <div class="mt-4 font-mono text-sm space-y-1">
+                    <div>|y| > 0</div>
+                    <div>|xy| ≤ p</div>
+                    <div>xy<sup>k</sup>z ∈ L</div>
                 </div>
 
-                <div id="finalText" class="text-base font-semibold leading-relaxed">
-                    <!-- JS will insert explanation -->
-                </div>
-
-                <div id="theoryText" class="text-sm mt-2 opacity-80">
-                    <!-- Pumping lemma explanation -->
-                </div>
             </div>
+
+
         </div>
 
-    </div>
+        <!-- K BUTTONS -->
+        <div class="mt-10">
 
+            <div id="topHead" class="flex justify-between items-center mb-3 hidden">
+                <h3 class="text-lg font-bold text-slate-700">Pumping Exploration (Click On k)</h3>
+                <span class="text-xs text-slate-400">Try different k values</span>
             </div>
+
+            <div id="kButtons" class="flex flex-wrap gap-2">
+                <!-- JS inject -->
+            </div>
+
         </div>
 
-    </section>
-        </main>
+        <!-- EXPANDABLE RESULTS -->
+        <div id="kDetails" class="mt-6 space-y-4"></div>
+
+        <div id="finalConclusion" 
+            class="hidden mt-10 p-6 rounded-2xl border fade-in
+            bg-gradient-to-r from-red-50 via-pink-50 to-orange-50 border-red-200">
+
+            <div id="finalConclusionText" class="text-base font-semibold"></div>
+
+        </div>
+            </section>
+                </main>
 
     <footer class="mt-20 text-center text-slate-400 text-sm">
         <p>Made for Theory of Automata & Formal Languages Project : 2026</p>

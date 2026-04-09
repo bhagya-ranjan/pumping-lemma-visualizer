@@ -1,132 +1,241 @@
 document.addEventListener("DOMContentLoaded", () => {
 
     const simulateBtn = document.getElementById('simulateBtn');
-    const splitArea = document.getElementById('splitArea');
-    const pumpControls = document.getElementById('pumpControls');
-    const pumpVisualizer = document.getElementById('pumpVisualizer');
-    const resultString = document.getElementById('resultString');
-    const resultBox = document.getElementById('resultBox');
-    const resultIcon = document.getElementById('resultIcon');
-    const conclusion = document.getElementById('conclusion');
-
-    const finalText = document.getElementById("finalText");
-    const theoryText = document.getElementById("theoryText");
+    const kButtons = document.getElementById('kButtons');
+    const kDetails = document.getElementById('kDetails');
 
     let currentParts = { x: '', y: '', z: '' };
-    let testResults = [];
 
+    //SIMULATE BUTTON
     simulateBtn.addEventListener('click', () => {
+        
+    const input = document.getElementById('stringInput').value;
+    const errorBox = document.getElementById('errorBox');
+    const topHead = document.getElementById('topHead');
+    const theorySection = document.getElementById('theorySection');
+    const finalConclusion = document.getElementById('finalConclusion');
+    finalConclusion.classList.add('hidden');
+    const error = validateInput(input);
+    topHead.classList.add("hidden");
+    kButtons.innerHTML = "";
+    kDetails.innerHTML = "";
+    if (error) {
+        errorBox.innerText = error;
+        errorBox.classList.remove('hidden');
+        theorySection.classList.add('hidden'); // hide if error
+        return;
+    }
+    topHead.classList.remove("hidden");
+    errorBox.classList.add('hidden');
 
-        const input = document.getElementById('stringInput').value || 'aaabbb';
+    // show theory + conclusion
+    theorySection.classList.remove('hidden');
 
-        currentParts.x = input.charAt(0);
-        currentParts.y = input.charAt(1);
-        currentParts.z = input.slice(2);
+    // existing logic
+    currentParts.x = input.charAt(0);
+    currentParts.y = input.charAt(1);
+    currentParts.z = input.slice(2);
 
-        document.getElementById('dispX').innerText = currentParts.x;
-        document.getElementById('dispY').innerText = currentParts.y;
-        document.getElementById('dispZ').innerText = currentParts.z;
+    generateKButtons();
+    kDetails.innerHTML = "";
+    computeConclusion();
+});
 
-        splitArea.classList.remove('hidden');
-        pumpControls.classList.remove('hidden');
+    // 🔹 GENERATE K BUTTONS
+    function generateKButtons() {
 
-        showDefaultVisualization();  
+        kButtons.innerHTML = "";
 
-        runFullTest();
-    });
-    function showDefaultVisualization() {
-    pumpVisualizer.innerHTML = '';
+        for (let k = 0; k <= 9; k++) {
 
-    addPartToVisual(currentParts.x, 'part-x');
-    addPartToVisual(currentParts.y, 'part-y');
-    addPartToVisual(currentParts.z, 'part-z');
-}
+            const btn = document.createElement("button");
+            btn.innerText = `k = ${k}`;
 
-    function runFullTest() {
-    console.log("Running full test...");
+            btn.className = `
+                px-4 py-2 rounded-lg text-sm font-semibold
+                bg-slate-800 text-white
+                hover:bg-blue-600 transition
+            `;
 
-    testResults = [];
-    let resultHTML = ``;
+            btn.onclick = () => showK(k);
 
-    for (let k = 0; k <= 5; k++) {
-        const str = currentParts.x + currentParts.y.repeat(k) + currentParts.z;
-        const valid = checkLanguage(str);
+            kButtons.appendChild(btn);
+        }
+    }
 
-        console.log("k:", k, str, valid);
+    // 🔹 SHOW EXPANDED RESULT
+    function showK(k) {
+        
+        const { x, y, z } = currentParts;
 
-        testResults.push(valid);
+        const pumpedY = y.repeat(k);
+        const resultStr = x + pumpedY + z;
+        const valid = checkLanguage(resultStr);
+        let explanation = "";
 
-        resultHTML += `
-            <div class="flex justify-between items-center px-3 py-2 rounded-lg 
-                ${valid ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200'}">
+        const lang = document.getElementById('langSelect').value;
 
-                <span>k = ${k}</span>
-                <span>${str}</span>
-                <span>${valid ? '✔' : '✖'}</span>
+        if (lang === 'anbn') {
+            explanation = valid
+                ? "Number of a's equals number of b's, so string remains valid."
+                : "After pumping, number of a's and b's are unequal → violates aⁿbⁿ.";
+        } else if (lang === 'astar') {
+            explanation = valid
+                ? "All characters are 'a', so string remains valid."
+                : "String contains characters other than 'a' → invalid.";
+        } else if (lang === 'even0') {
+            explanation = valid
+                ? "Number of 0s is even."
+                : "Number of 0s becomes odd → invalid.";
+        } else if (lang === 'end01') {
+            explanation = valid
+                ? "String still ends with 01."
+                : "Ending pattern breaks → invalid.";
+        }
+
+        kDetails.innerHTML = `
+        <div class="p-5 rounded-xl border bg-slate-50 fade-in">
+
+            <!-- Animated Split -->
+            <div class="flex justify-center gap-3 text-xl font-mono mb-4">
+
+                <span class="part-x">${x}</span>
+
+                <span class="part-y animate-pulse">
+                    ${k === 0 ? "ε" : y.repeat(k)}
+                </span>
+
+                <span class="part-z">${z}</span>
+
             </div>
+
+            <!-- Result String -->
+            <div class="text-center font-mono text-lg mb-2">
+                ${resultStr}
+            </div>
+
+            <!-- Validity -->
+            <div class="text-center font-bold ${valid ? 'text-green-500' : 'text-red-500'}">
+                ${valid ? '✔ Belongs to L' : '❌ Does not belong to given Language'}
+            </div>
+
+            <!-- Explanation -->
+            <div class="mt-3 text-sm text-slate-600 leading-relaxed text-center">
+                ${explanation}
+            </div>
+
+        </div>
         `;
     }
 
-    if (resultString) {
-        resultString.innerHTML = resultHTML;
-    } else {
-        console.error("resultString not found!");
-    }
-
-    finalConclusion();
-}
-
+    //LANGUAGE CHECK
     function checkLanguage(str) {
+
         const lang = document.getElementById('langSelect').value;
 
         if (lang === 'anbn') {
             const as = (str.match(/a/g) || []).length;
             const bs = (str.match(/b/g) || []).length;
             return (as === bs && as > 0);
-        } else if (lang === 'astar') {
+        }
+
+        else if (lang === 'astar') {
             return /^a*$/.test(str);
-        } else if (lang === 'even0') {
+        }
+
+        else if (lang === 'even0') {
             const zeros = (str.match(/0/g) || []).length;
             return (zeros % 2 === 0);
-        } else if (lang === 'end01') {
+        }
+
+        else if (lang === 'end01') {
             return str.endsWith('01');
         }
 
         return false;
     }
 
-    function finalConclusion() {
-        const allValid = testResults.every(v => v === true);
+    function validateInput(str) {
 
-        conclusion.classList.remove('hidden');
+    const lang = document.getElementById('langSelect').value;
 
-        if (allValid) {
-            resultIcon.innerHTML = "✔";
-            conclusion.className = "mt-6 p-5 rounded-2xl bg-green-50 border border-green-200 text-green-800 fade-in";
+    if (!str || str.length === 0) {
+        return "Please enter a string.";
+    }
 
-            finalText.innerText =
-                "All tested values of k satisfy the language.";
-
-            theoryText.innerText =
-                "According to Pumping Lemma, this language MAY be regular (not guaranteed).";
-
-        } else {
-            resultIcon.innerHTML = "✖";
-            conclusion.className = "mt-6 p-5 rounded-2xl bg-red-50 border border-red-200 text-red-800 fade-in";
-
-            finalText.innerText =
-                "At least one value of k breaks the language.";
-
-            theoryText.innerText =
-                "According to Pumping Lemma, if any pumped string fails, the language is NOT regular.";
+    if (lang === 'anbn') {
+        if (!/^a+b+$/.test(str)) {
+            return "String must be in format aⁿbⁿ (only a's followed by b's).";
         }
     }
 
-    function addPartToVisual(text, className) {
-        const span = document.createElement('span');
-        span.className = className;
-        span.innerText = text;
-        pumpVisualizer.appendChild(span);
+    else if (lang === 'astar') {
+        if (!/^a*$/.test(str)) {
+            return "String must contain only 'a'.";
+        }
     }
+
+    else if (lang === 'even0') {
+        if (!/^[01]+$/.test(str)) {
+            return "String must be binary (0s and 1s only).";
+        }
+    }
+
+    else if (lang === 'end01') {
+        if (!/^[01]+$/.test(str)) {
+            return "String must be binary (0s and 1s only).";
+        }
+    }
+
+    return null; // valid
+}
+
+function computeConclusion() {
+
+    const finalConclusion = document.getElementById('finalConclusion');
+    const finalText = document.getElementById('finalConclusionText');
+
+    let allValid = true;
+
+    for (let k = 0; k <= 9; k++) {
+
+        const str = currentParts.x + currentParts.y.repeat(k) + currentParts.z;
+        const valid = checkLanguage(str);
+
+        if (!valid) {
+            allValid = false;
+            break;
+        }
+    }
+
+    finalConclusion.classList.remove('hidden');
+
+    if (allValid) {
+
+        finalConclusion.className =
+            "mt-10 p-6 rounded-2xl border fade-in bg-green-50 border-green-200";
+
+        finalText.innerHTML = `
+            All tested cases satisfy the language.<br>
+            We cannot assure whether the language is regular or not.
+        `;
+
+    } else {
+
+        finalConclusion.className =
+            "mt-10 p-6 rounded-2xl border fade-in bg-gradient-to-r from-red-50 via-pink-50 to-orange-50 border-red-200";
+
+        finalText.innerHTML = `
+            Since we have shown that for every valid decomposition 
+            <strong>s = xyz</strong> (where <strong>|y| ≥ 1</strong> and <strong>|xy| ≤ p</strong>), 
+            there exists an integer <strong>i ≥ 0</strong> such that the pumped string 
+            <strong>xy<sup>i</sup>z ∉ L</strong>, the string <strong>s</strong> cannot be pumped.<br><br>
+
+            This directly contradicts the Pumping Lemma. Therefore, our initial assumption 
+            that <strong>L</strong> is a regular language must be false, and we conclude that L is
+            <strong class="text-red-600 font-mono text-xl animate-pulse">NON-REGULAR </strong>.
+        `;
+    }
+}
 
 });
