@@ -155,7 +155,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return false;
     }
 
-    function validateInput(str) {
+function validateInput(str) {
 
     const lang = document.getElementById('langSelect').value;
 
@@ -163,31 +163,54 @@ document.addEventListener("DOMContentLoaded", () => {
         return "Please enter a string.";
     }
 
+    // 🔴 L1: a^n b^n
     if (lang === 'anbn') {
         if (!/^a+b+$/.test(str)) {
-            return "String must be in format aⁿbⁿ (only a's followed by b's).";
+            return "String must be in format aⁿbⁿ (a's followed by b's).";
+        }
+
+        const aCount = (str.match(/a/g) || []).length;
+        const bCount = (str.match(/b/g) || []).length;
+
+        if (aCount !== bCount) {
+            return "Number of a's must equal number of b's.";
         }
     }
 
+    // 🔵 L2: a*
     else if (lang === 'astar') {
         if (!/^a*$/.test(str)) {
             return "String must contain only 'a'.";
         }
     }
 
+    // 🟢 L3: Even number of 0s
     else if (lang === 'even0') {
+
         if (!/^[01]+$/.test(str)) {
-            return "String must be binary (0s and 1s only).";
+            return "String must contain only 0 and 1.";
+        }
+
+        const zeros = (str.match(/0/g) || []).length;
+
+        if (zeros % 2 !== 0) {
+            return "Number of 0s must be even.";
         }
     }
 
+    // 🟣 L4: Ends with 01
     else if (lang === 'end01') {
+
         if (!/^[01]+$/.test(str)) {
-            return "String must be binary (0s and 1s only).";
+            return "String must contain only 0 and 1.";
+        }
+
+        if (!str.endsWith("01")) {
+            return "String must end with '01'.";
         }
     }
 
-    return null; // valid
+    return null; // ✅ valid
 }
 
 function computeConclusion() {
