@@ -13,6 +13,7 @@ An interactive web-based tool to understand and visualize the **Pumping Lemma fo
 
 ---
 
+
 ## 🎯 Project Description
 
 This project helps students understand the **Pumping Lemma** using:
@@ -95,4 +96,5 @@ The Pumping Lemma states:
 
 This project was built as part of **TAFL coursework** to simplify understanding of formal language theory.
 
+AUTHOR :- Bhagya Ranjan 
 ---
